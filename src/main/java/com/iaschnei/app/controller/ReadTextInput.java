@@ -7,7 +7,7 @@ import java.util.Scanner;
  */
 public class ReadTextInput {
 
-  public String get_next_input() {
+  public static String get_next_input() {
 
     var console = System.console();
 

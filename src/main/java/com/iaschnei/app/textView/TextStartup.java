@@ -1,7 +1,7 @@
 package com.iaschnei.app.textView;
 
 /**
- * Startup
+ * TextStartup
  */
 public class TextStartup {
 
