@@ -1,13 +1,14 @@
 package com.iaschnei.app.controller;
 
 import com.iaschnei.app.textView.TextStartup;
+import com.iaschnei.app.model.WriteRead;
 
 /**
  * Startup
  */
 public class Startup {
 
-  public void control_startup(String mode) throws Exception {
+  public static void control_startup(String mode) throws Exception {
 
     switch (mode) {
 

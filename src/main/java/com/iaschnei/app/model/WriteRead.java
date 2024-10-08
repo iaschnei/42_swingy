@@ -3,7 +3,8 @@ package com.iaschnei.app.model;
 import java.io.FileWriter;
 import java.io.File;
 import java.io.RandomAccessFile;
-import org.json.JSONObject;
+//import org.json.JSONObject;
+import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import java.util.Scanner;
 
@@ -16,11 +17,14 @@ public class WriteRead {
   File        saves_file;
   FileWriter  writer;
   Scanner     reader;
-  JSONObject  json;
+  JSONObject  json = new JSONObject();
+  String      save_file_name;
 
   // Will create the file if it doesn't exist yet
-  public void open_saves_file() throws Exception{
-    writer = new FileWriter("saves.txt");
+  public void open_saves_file(String save_file_name) throws Exception{
+    writer = new FileWriter(save_file_name);
+    this.save_file_name = save_file_name;
+    writer.close();
   }
 
   public void close_saves_file() throws Exception {
@@ -28,7 +32,7 @@ public class WriteRead {
   }
 
   public String get_current_data() throws Exception {
-    saves_file = new File("saves.txt");
+    saves_file = new File(save_file_name);
     reader = new Scanner(saves_file);
 
     String data = new String();
@@ -42,16 +46,26 @@ public class WriteRead {
   }
 
   public void add_json_entry(String key, String content) throws Exception{
-    json = new JSONObject();
+    erase_saves_file();
+    writer = new FileWriter(save_file_name, true);
     json.put(key, content);
     writer.write(json.toString());
+    writer.close();
   }
 
   public String get_json_entry(String key) throws Exception{
 
     String current_data = get_current_data();
 
+    if (current_data == null || current_data.isEmpty()) {
+        throw new Exception("Current data is null or empty");
+    }
+
     Object  file_data = JSONValue.parse(current_data);
+
+    if (file_data == null) {
+        throw new Exception("Failed to parse JSON: " + current_data);
+    }
 
     JSONObject decode_file_data = (JSONObject) file_data;
 
@@ -80,7 +94,7 @@ public class WriteRead {
   }
 
   public void erase_saves_file() throws Exception {
-    RandomAccessFile file = new RandomAccessFile("saves.txt", "rw");
+    RandomAccessFile file = new RandomAccessFile(save_file_name, "rw");
     file.setLength(0);
     file.close();
   }

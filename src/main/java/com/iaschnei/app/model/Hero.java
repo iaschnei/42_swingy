@@ -1,5 +1,6 @@
 package com.iaschnei.app.model;
 
+import jakarta.validation.constraints.Size;
 import java.util.Random;
 
 /**
@@ -8,6 +9,7 @@ import java.util.Random;
  */
 public class Hero extends Character {
 
+  @Size(min = 2, max = 12, message="Name must be between 2 and 12 characters")
   private String  name;
   private String  class_type;
   private int     exp;

@@ -1,0 +1,1 @@
+{"Hero_class":"Warrior","Hero_name":"Maat","Hero_pos_x":"0","Hero_pos_y":"0","Hero_lvl":"1","Hero_atk":"8","Hero_hp":"20","Hero_def":"12"}

@@ -1,5 +1,7 @@
 package com.iaschnei.app.textView;
 
+import com.iaschnei.app.model.WriteRead;
+
 /**
  * TextStartup
  */
@@ -53,10 +55,20 @@ public class TextStartup {
 
   // Displayed after a new save has been created
   // - Hero name (Class) Level 1
-  public static void display_hero_info_screen() {
+  public static void display_hero_info_screen(WriteRead save_reader) throws Exception {
+
+    String hero_name = save_reader.get_json_entry("Hero_name");
+    String hero_class = save_reader.get_json_entry("Hero_class");
+    String hero_lvl = save_reader.get_json_entry("Hero_lvl");
+    String hero_atk = save_reader.get_json_entry("Hero_atk");
+    String hero_def = save_reader.get_json_entry("Hero_def");
+    String hero_hp = save_reader.get_json_entry("Hero_hp");
 
     System.out.println("/--------- YOUR HERO --------\\");
-//TODO : fetch info from model
+    System.out.println("| - " + String.format("%-25s", hero_name) + "|");
+    System.out.println("|   " + String.format("%-8s", hero_class) + String.format("%-17s", " Level: " + hero_lvl) + "|");
+    System.out.println("|   " + String.format("%-25s", "ATK: " + hero_atk + " DEF: " + hero_def + " HP: " + hero_hp) + "|");
+    System.out.println("|                            |");
     System.out.println("| -> continue                |");
     System.out.println("\\----------------------------/");
   }
@@ -79,7 +91,7 @@ public class TextStartup {
 
     System.out.println("/--------- SAVE INFO --------\\");
     System.out.println("|                            |");
-//TODO : fetch info from model
+
     System.out.println("| -> back                    |");
     System.out.println("| -> continue                |");
     System.out.println("\\----------------------------/");
