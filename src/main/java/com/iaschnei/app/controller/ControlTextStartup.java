@@ -1,8 +1,11 @@
 package com.iaschnei.app.controller;
 
 import com.iaschnei.app.textView.TextStartup;
+import com.iaschnei.app.textView.TextMap;
 import com.iaschnei.app.model.WriteRead;
 import com.iaschnei.app.model.Hero;
+import com.iaschnei.app.model.Map;
+import com.iaschnei.app.model.Pos;
 
 /**
  * ControlTextStartup
@@ -85,8 +88,6 @@ public class ControlTextStartup {
           save_reader.add_json_entry("Hero_atk", "8");
           save_reader.add_json_entry("Hero_def", "12");
           save_reader.add_json_entry("Hero_hp", "20");
-          save_reader.add_json_entry("Hero_pos_x", "0");
-          save_reader.add_json_entry("Hero_pos_y", "0");
           hero = new Hero(save_reader.get_json_entry("Hero_name"), answer, 1, 0, 8, 12, 20, 0, 0, null, null, null);
           TextStartup.display_hero_info_screen(save_reader);
           awaitContinueToGame(save_reader, hero);
@@ -98,8 +99,6 @@ public class ControlTextStartup {
           save_reader.add_json_entry("Hero_atk", "15");
           save_reader.add_json_entry("Hero_def", "5");
           save_reader.add_json_entry("Hero_hp", "20");
-          save_reader.add_json_entry("Hero_pos_x", "0");
-          save_reader.add_json_entry("Hero_pos_y", "0");
           hero = new Hero(save_reader.get_json_entry("Hero_name"), answer, 1, 0, 15, 5, 20, 0, 0, null, null, null);
           TextStartup.display_hero_info_screen(save_reader);
           awaitContinueToGame(save_reader, hero);
@@ -112,8 +111,6 @@ public class ControlTextStartup {
           save_reader.add_json_entry("Hero_atk", "10");
           save_reader.add_json_entry("Hero_def", "7");
           save_reader.add_json_entry("Hero_hp", "20");
-          save_reader.add_json_entry("Hero_pos_x", "0");
-          save_reader.add_json_entry("Hero_pos_y", "0");
           hero = new Hero(save_reader.get_json_entry("Hero_name"), answer, 1, 0, 10, 7, 20, 0, 0, null, null, null);
           TextStartup.display_hero_info_screen(save_reader);
           awaitContinueToGame(save_reader, hero);
@@ -130,6 +127,19 @@ public class ControlTextStartup {
 
       if (answer.matches("continue")) {
         System.out.println("Launching the game.....");
+        Map map = new Map();
+        map.generate_map(hero);
+
+        hero.set_position(new Pos(map.get_size() / 2, map.get_size()/2));
+        save_reader.add_json_entry("Hero_pos_x", String.valueOf(hero.get_position().get_x()));
+        save_reader.add_json_entry("Hero_pos_y", String.valueOf(hero.get_position().get_y()));
+
+        map.set_element_at(hero.get_position().get_x(), hero.get_position().get_y(), 'P');
+
+        save_reader.add_json_entry("Map", map.get_map_string());
+
+        TextMap.display_map(save_reader, map.get_size());
+        //TODO : game input loop
       }
       else {
         awaitContinueToGame(save_reader, hero);

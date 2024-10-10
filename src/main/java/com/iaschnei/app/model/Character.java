@@ -15,7 +15,7 @@ public class Character {
 
 // ---------- GETTERS ----------
 
-  public int get_level() {
+  public int get_lvl() {
     return (level);
   }
 
