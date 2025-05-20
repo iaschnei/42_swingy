@@ -1,4 +1,4 @@
 package com.swingy.model.hero;
 
-public class Archer {
+public class Archer extends Hero {
 }

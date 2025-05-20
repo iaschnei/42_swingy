@@ -1,4 +1,6 @@
 package com.swingy.view.gui;
 
-public class GUIView {
+import com.swingy.view.View;
+
+public class GUIView implements View {
 }

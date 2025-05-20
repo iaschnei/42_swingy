@@ -1,4 +1,4 @@
 package com.swingy.model.hero;
 
-public class Mage {
+public class Mage extends Hero {
 }
