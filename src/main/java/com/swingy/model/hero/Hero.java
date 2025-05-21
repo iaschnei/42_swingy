@@ -1,62 +1,89 @@
 package com.swingy.model.hero;
 
-abstract class Hero {
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
-    int HP;
-    int DEF;
-    int ATK;
-    int Level;
-    int EXP;
-    int XPos;
-    int YPos;
+public class Hero {
+
+
+    @NotNull
+    @Size(min = 2, max = 10, message = "Name must be 2 char long min and 10 char long max")
+    protected String name;
+
+    @NotNull
+    @Pattern(regexp = "Berserk|Mage|Archer", message = "Class must be Berserk, Mage, or Archer")
+    protected String className;
+
+    protected int HP;
+    protected int DEF;
+    protected int ATK;
+    protected int Level;
+    protected int EXP;
+    protected int XPos;
+    protected int YPos;
 
     //TODO : add an artifact slot
 
-    int getHp() {
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+    public void setClassName(String className) {
+        this.className = className;
+    }
+
+    public int getHp() {
         return HP;
     }
-    void setHp(int hp) {
-        HP = hp;
+    public void setHp(int hp) {
+        this.HP = hp;
     }
 
-    int getDefense() {
+    public int getDefense() {
         return DEF;
     }
-    void setDefense(int defense){
-        DEF = defense;
+    public void setDefense(int defense){
+        this.DEF = defense;
     }
 
-    int getAttack() {
+    public int getAttack() {
         return ATK;
     }
-    void  setAttack(int attack) {
-        ATK = attack;
+    public void  setAttack(int attack) {
+        this.ATK = attack;
     }
 
-    int getLevel() {
+    public int getLevel() {
         return Level;
     }
-    void setLevel(int level) {
-        Level = level;
+    public void setLevel(int level) {
+        this.Level = level;
     }
 
-    int getExperience() {
+    public int getExperience() {
         return EXP;
     }
-    void setExperience(int experience) {
-        EXP = experience;
+    public void setExperience(int experience) {
+        this.EXP = experience;
     }
 
-    int getXPos() {
+    public int getXPos() {
         return XPos;
     }
-    void setXPos(int xPos) {
-        XPos = xPos;
+    public void setXPos(int xPos) {
+        this.XPos = xPos;
     }
-    int getYPos() {
+    public int getYPos() {
         return YPos;
     }
-    void setYPos(int yPos) {
-        YPos = yPos;
+    public void setYPos(int yPos) {
+        this.YPos = yPos;
     }
 }

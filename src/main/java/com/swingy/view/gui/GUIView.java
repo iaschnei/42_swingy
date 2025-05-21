@@ -1,6 +1,95 @@
 package com.swingy.view.gui;
 
+import com.swingy.controller.GameController;
+import com.swingy.controller.HeroCreationInput;
+import com.swingy.model.hero.Hero;
+import com.swingy.model.map.Tile;
+import com.swingy.model.villain.Villain;
 import com.swingy.view.View;
 
+import java.util.List;
+
 public class GUIView implements View {
+
+    GameController controller;
+
+    @Override
+    public void showHeroStats(Hero hero) {
+
+    }
+
+    @Override
+    public void showMap(Tile[][] map, int heroX, int heroY) {
+
+    }
+
+    @Override
+    public void showBattleResult(boolean success, Villain villain) {
+
+    }
+
+    @Override
+    public void showVillain(Villain villain) {
+
+    }
+
+    @Override
+    public void showLevelUp(Hero hero) {
+
+    }
+
+    @Override
+    public void showVictory() {
+
+    }
+
+    @Override
+    public void showGameOver() {
+
+    }
+
+    @Override
+    public void showMessage(String message) {
+
+    }
+
+    @Override
+    public void showError(String message) {
+
+    }
+
+    @Override
+    public void requestLoadOrCreate(GameController controller) {
+        this.controller = controller;
+    }
+
+    @Override
+    public void requestHeroName() {
+
+    }
+
+    @Override
+    public void requestHeroClass() {
+
+    }
+
+    @Override
+    public void requestGameStartConfirm() {
+
+    }
+
+    @Override
+    public void requestHeroSelection(List<Hero> heroes) {
+
+    }
+
+    @Override
+    public void requestMovement() {
+
+    }
+
+    @Override
+    public void requestBattleDecision(Villain villain) {
+
+    }
 }

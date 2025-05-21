@@ -1,5 +1,7 @@
 package com.swingy.view.console;
 
+import com.swingy.controller.GameController;
+import com.swingy.controller.HeroCreationInput;
 import com.swingy.model.hero.Hero;
 import com.swingy.model.map.Tile;
 import com.swingy.model.villain.Villain;
@@ -8,9 +10,11 @@ import com.swingy.view.View;
 import java.util.List;
 import java.util.Scanner;
 
-class ConsoleView implements View {
+public class ConsoleView implements View {
 
     public ConsoleView() {}
+
+    GameController controller;
 
     @Override
     public void showHeroStats(Hero hero) {
@@ -60,13 +64,25 @@ class ConsoleView implements View {
     }
 
     @Override
+    public void requestLoadOrCreate(GameController controller) {
+        this.controller = controller;
+        System.out.println("Pick an option:");
+        System.out.println("-- Load_save");
+        System.out.println("-- Create_save");
+        System.out.print("-> ");
+        Scanner scanner = new Scanner(System.in);
+        String answer = scanner.nextLine();
+        this.controller.onLoadOrCreateChoice(answer);
+    }
+
+    @Override
     public void requestHeroName() {
         System.out.println("Please enter your hero's name:");
         System.out.println("(Alphabetic chars only)");
         System.out.print("-> ");
         Scanner scanner = new Scanner(System.in);
         String heroName = scanner.nextLine();
-        //controller.onHeroNameEntered(heroName);
+        this.controller.heroCreationInput.onNameInput(heroName);
     }
 
     @Override
@@ -95,7 +111,8 @@ class ConsoleView implements View {
         System.out.println("\\---------------/");
         System.out.print("-> ");
         Scanner scanner = new Scanner(System.in);
-        String heroName = scanner.nextLine();
+        String heroClass = scanner.nextLine();
+        this.controller.heroCreationInput.onClassInput(heroClass);
     }
 
     @Override
@@ -104,7 +121,8 @@ class ConsoleView implements View {
         System.out.println("  -- Yes ---- No -- ");
         System.out.print("-> ");
         Scanner scanner = new Scanner(System.in);
-        String heroName = scanner.nextLine();
+        String confirm = scanner.nextLine();
+        this.controller.heroCreationInput.onGameStartConfirm(confirm);
     }
 
     @Override
