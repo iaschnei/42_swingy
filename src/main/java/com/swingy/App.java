@@ -1,11 +1,21 @@
 package com.swingy;
 
 import com.swingy.controller.GameController;
+import com.swingy.storage.DbUtil;
 import com.swingy.view.console.ConsoleView;
 
 public class App {
 
     public static void main(String[] args) {
+
+        // Make sure the database is properly closed if the program exits
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            System.out.println("Shutting down database...");
+            DbUtil.shutdown();
+        }));
+
+
+        DbUtil.initDatabase();
 
         GameController gameController;
 

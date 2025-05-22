@@ -1,7 +1,6 @@
 package com.swingy.view;
 
 import com.swingy.controller.GameController;
-import com.swingy.controller.HeroCreationInput;
 import com.swingy.model.hero.Hero;
 import com.swingy.model.map.Tile;
 import com.swingy.model.villain.Villain;
@@ -25,10 +24,11 @@ public interface View {
 
     // Request input
     void requestLoadOrCreate(GameController gameController);
+    void requestSaveToDelete(List<String> saves);
     void requestHeroName();
     void requestHeroClass();
     void requestGameStartConfirm();
-    void requestHeroSelection(List<Hero> heroes);
+    void requestHeroSelection(List<String> heroes);
     void requestMovement();
     void requestBattleDecision(Villain villain);
 }

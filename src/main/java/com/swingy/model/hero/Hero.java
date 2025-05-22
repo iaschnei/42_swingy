@@ -5,85 +5,112 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public class Hero {
+    public static final String CLASS_BERSERK = "Berserk";
+    public static final String CLASS_MAGE = "Mage";
+    public static final String CLASS_ARCHER = "Archer";
 
+    // Stats constants
+    private static final int BERSERK_HP = 15;
+    private static final int BERSERK_ATK = 5;
+    private static final int BERSERK_DEF = 10;
+
+    private static final int MAGE_HP = 10;
+    private static final int MAGE_ATK = 15;
+    private static final int MAGE_DEF = 5;
+
+    private static final int ARCHER_HP = 12;
+    private static final int ARCHER_ATK = 10;
+    private static final int ARCHER_DEF = 7;
 
     @NotNull
     @Size(min = 2, max = 10, message = "Name must be 2 char long min and 10 char long max")
-    protected String name;
+    private String name;
 
     @NotNull
     @Pattern(regexp = "Berserk|Mage|Archer", message = "Class must be Berserk, Mage, or Archer")
-    protected String className;
+    private String className;
 
-    protected int HP;
-    protected int DEF;
-    protected int ATK;
-    protected int Level;
-    protected int EXP;
-    protected int XPos;
-    protected int YPos;
+    // Base stats
+    private int hp;
+    private int defense;
+    private int attack;
+    private int level;
+    private int experience;
 
-    //TODO : add an artifact slot
+    // Position
+    private int xPos;
+    private int yPos;
 
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
+    // Special powers
+    private boolean powerSecondChance;
+    private boolean powerExecute;
+    private boolean powerEscape;
 
-    public String getClassName() {
-        return className;
-    }
-    public void setClassName(String className) {
-        this.className = className;
-    }
+    //TODO Add an artifact slot
 
-    public int getHp() {
-        return HP;
-    }
-    public void setHp(int hp) {
-        this.HP = hp;
-    }
+    public void initHero(String className) {
+        this.setClassName(className);
+        this.setLevel(1);
+        this.setExperience(0);
+        this.setXPos(0);
+        this.setYPos(0);
 
-    public int getDefense() {
-        return DEF;
-    }
-    public void setDefense(int defense){
-        this.DEF = defense;
-    }
-
-    public int getAttack() {
-        return ATK;
-    }
-    public void  setAttack(int attack) {
-        this.ATK = attack;
-    }
-
-    public int getLevel() {
-        return Level;
-    }
-    public void setLevel(int level) {
-        this.Level = level;
+        switch (className) {
+            case CLASS_BERSERK -> {
+                this.setHp(BERSERK_HP);
+                this.setAttack(BERSERK_ATK);
+                this.setDefense(BERSERK_DEF);
+                this.setPowerSecondChance(true);
+            }
+            case CLASS_MAGE -> {
+                this.setHp(MAGE_HP);
+                this.setAttack(MAGE_ATK);
+                this.setDefense(MAGE_DEF);
+                this.setPowerExecute(true);
+            }
+            case CLASS_ARCHER -> {
+                this.setHp(ARCHER_HP);
+                this.setAttack(ARCHER_ATK);
+                this.setDefense(ARCHER_DEF);
+                this.setPowerEscape(true);
+            }
+        }
     }
 
-    public int getExperience() {
-        return EXP;
-    }
-    public void setExperience(int experience) {
-        this.EXP = experience;
-    }
+    // Getters and setters remain the same but with improved formatting
+    public boolean isPowerEscape() { return powerEscape; }
+    public void setPowerEscape(boolean powerEscape) { this.powerEscape = powerEscape; }
 
-    public int getXPos() {
-        return XPos;
-    }
-    public void setXPos(int xPos) {
-        this.XPos = xPos;
-    }
-    public int getYPos() {
-        return YPos;
-    }
-    public void setYPos(int yPos) {
-        this.YPos = yPos;
-    }
+    public boolean isPowerSecondChance() { return powerSecondChance; }
+    public void setPowerSecondChance(boolean powerSecondChance) { this.powerSecondChance = powerSecondChance; }
+
+    public boolean isPowerExecute() { return powerExecute; }
+    public void setPowerExecute(boolean powerExecute) { this.powerExecute = powerExecute; }
+
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+
+    public String getClassName() { return className; }
+    public void setClassName(String className) { this.className = className; }
+
+    public int getHp() { return hp; }
+    public void setHp(int hp) { this.hp = hp; }
+
+    public int getDefense() { return defense; }
+    public void setDefense(int defense) { this.defense = defense; }
+
+    public int getAttack() { return attack; }
+    public void setAttack(int attack) { this.attack = attack; }
+
+    public int getLevel() { return level; }
+    public void setLevel(int level) { this.level = level; }
+
+    public int getExperience() { return experience; }
+    public void setExperience(int experience) { this.experience = experience; }
+
+    public int getXPos() { return xPos; }
+    public void setXPos(int xPos) { this.xPos = xPos; }
+
+    public int getYPos() { return yPos; }
+    public void setYPos(int yPos) { this.yPos = yPos; }
 }

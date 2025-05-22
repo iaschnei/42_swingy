@@ -1,7 +1,6 @@
 package com.swingy.view.gui;
 
 import com.swingy.controller.GameController;
-import com.swingy.controller.HeroCreationInput;
 import com.swingy.model.hero.Hero;
 import com.swingy.model.map.Tile;
 import com.swingy.model.villain.Villain;
@@ -64,6 +63,11 @@ public class GUIView implements View {
     }
 
     @Override
+    public void requestSaveToDelete(List<String> saves) {
+
+    }
+
+    @Override
     public void requestHeroName() {
 
     }
@@ -79,7 +83,7 @@ public class GUIView implements View {
     }
 
     @Override
-    public void requestHeroSelection(List<Hero> heroes) {
+    public void requestHeroSelection(List<String> heroes) {
 
     }
 

@@ -1,7 +1,6 @@
 package com.swingy.view.console;
 
 import com.swingy.controller.GameController;
-import com.swingy.controller.HeroCreationInput;
 import com.swingy.model.hero.Hero;
 import com.swingy.model.map.Tile;
 import com.swingy.model.villain.Villain;
@@ -18,7 +17,28 @@ public class ConsoleView implements View {
 
     @Override
     public void showHeroStats(Hero hero) {
+        System.out.println("\n=== Hero Stats ===");
+        System.out.println("Name: " + hero.getName());
+        System.out.println("Class: " + hero.getClassName());
+        System.out.println("Level: " + hero.getLevel());
+        System.out.println("Experience: " + hero.getExperience());
+        System.out.println("HP: " + hero.getHp());
+        System.out.println("Attack: " + hero.getAttack());
+        System.out.println("Defense: " + hero.getDefense());
+        System.out.println("Position: (" + hero.getXPos() + ", " + hero.getYPos() + ")");
+        System.out.println("Special Power: " + getHeroPower(hero));
+        System.out.println("================\n");
+    }
 
+    private String getHeroPower(Hero hero) {
+        if (hero.isPowerSecondChance()) {
+            return "Second Chance (Survives at 1 HP)";
+        } else if (hero.isPowerExecute()) {
+            return "Execute (Instant kill under 3 HP)";
+        } else if (hero.isPowerEscape()) {
+            return "Escape Master (+15% escape chance)";
+        }
+        return "None";
     }
 
     @Override
@@ -69,11 +89,25 @@ public class ConsoleView implements View {
         System.out.println("Pick an option:");
         System.out.println("-- Load_save");
         System.out.println("-- Create_save");
+        System.out.println("-- Delete_save");
         System.out.print("-> ");
         Scanner scanner = new Scanner(System.in);
         String answer = scanner.nextLine();
         this.controller.onLoadOrCreateChoice(answer);
     }
+
+    @Override
+    public void requestSaveToDelete(List<String> saves) {
+        System.out.println("Select save to delete:");
+        for (String save : saves) {
+            System.out.println("-- " + save);
+        }
+        System.out.print("-> ");
+        Scanner scanner = new Scanner(System.in);
+        String saveName = scanner.nextLine();
+        this.controller.onSaveToDelete(saveName);
+    }
+
 
     @Override
     public void requestHeroName() {
@@ -126,8 +160,15 @@ public class ConsoleView implements View {
     }
 
     @Override
-    public void requestHeroSelection(List<Hero> heroes) {
-
+    public void requestHeroSelection(List<String> heroes) {
+        System.out.println("Select hero to load:");
+        for (String hero : heroes) {
+            System.out.println("-- " + hero);
+        }
+        System.out.print("-> ");
+        Scanner scanner = new Scanner(System.in);
+        String heroName = scanner.nextLine();
+        this.controller.onHeroLoad(heroName);
     }
 
     @Override

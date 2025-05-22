@@ -1,8 +1,10 @@
 package com.swingy.controller;
 
 import com.swingy.model.hero.Hero;
+import com.swingy.storage.HeroDbRepository;
 import jakarta.validation.ConstraintViolation;
 
+import java.sql.SQLException;
 import java.util.Objects;
 import java.util.Set;
 
@@ -50,11 +52,20 @@ public class HeroCreationInput {
 
     public void onGameStartConfirm(String input) {
 
+        HeroDbRepository heroRepository = new HeroDbRepository();
+
         if (Objects.equals(input, "No")) {
             this.gameController.currentView.showMessage("Resetting character creation..");
         }
         else if (Objects.equals(input, "Yes")) {
-            this.gameController.currentView.showMessage("Saving Hero's data and launching game..");
+            try {
+                this.tmp_hero.initHero(this.tmp_hero.getClassName());
+                heroRepository.saveHero(this.tmp_hero);
+                this.gameController.setCurrentHero(this.tmp_hero);
+                this.gameController.startGame();
+            } catch (SQLException e) {
+                System.err.println("Error saving hero: " + e.getMessage());
+            }
         }
         else {
             this.gameController.currentView.showError("Invalid input");
