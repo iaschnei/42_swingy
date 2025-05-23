@@ -2,6 +2,7 @@ package com.swingy.view.console;
 
 import com.swingy.controller.GameController;
 import com.swingy.model.hero.Hero;
+import com.swingy.model.map.GameMap;
 import com.swingy.model.map.Tile;
 import com.swingy.model.villain.Villain;
 import com.swingy.view.View;
@@ -42,8 +43,27 @@ public class ConsoleView implements View {
     }
 
     @Override
-    public void showMap(Tile[][] map, int heroX, int heroY) {
+    public void showMap(GameMap gameMap) {
 
+        int mapSize = gameMap.getSize();
+
+        for (int h = 0; h < mapSize; h++) {
+            for (int w = 0; w < mapSize; w++) {
+                if (gameMap.getTile(h, w).isHero()) {
+                    System.out.print("H ");
+                }
+                else if (gameMap.getTile(h, w).isVisited()) {
+                    System.out.print("~ ");
+                } //TODO vvv REMOVE FOR GAMEPLAY vvv
+                else if (gameMap.getTile(h, w).isEnemy()) {
+                    System.out.print("E ");
+                } // TODO ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                else {
+                    System.out.print("· ");
+                }
+            }
+            System.out.println();
+        }
     }
 
     @Override

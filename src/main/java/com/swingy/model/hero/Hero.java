@@ -77,7 +77,7 @@ public class Hero {
         }
     }
 
-    // Getters and setters remain the same but with improved formatting
+    // Getters and setters
     public boolean isPowerEscape() { return powerEscape; }
     public void setPowerEscape(boolean powerEscape) { this.powerEscape = powerEscape; }
 

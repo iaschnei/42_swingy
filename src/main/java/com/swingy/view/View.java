@@ -2,6 +2,7 @@ package com.swingy.view;
 
 import com.swingy.controller.GameController;
 import com.swingy.model.hero.Hero;
+import com.swingy.model.map.GameMap;
 import com.swingy.model.map.Tile;
 import com.swingy.model.villain.Villain;
 
@@ -11,7 +12,7 @@ public interface View {
 
     // Display various information
     void showHeroStats(Hero hero);
-    void showMap(Tile[][] map, int heroX, int heroY);
+    void showMap(GameMap gameMap);
     void showBattleResult(boolean success, Villain villain);
     void showVillain(Villain villain);
     void showLevelUp(Hero hero);

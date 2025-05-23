@@ -62,7 +62,7 @@ public class HeroCreationInput {
                 this.tmp_hero.initHero(this.tmp_hero.getClassName());
                 heroRepository.saveHero(this.tmp_hero);
                 this.gameController.setCurrentHero(this.tmp_hero);
-                this.gameController.startGame();
+                this.gameController.startNewGame();
             } catch (SQLException e) {
                 System.err.println("Error saving hero: " + e.getMessage());
             }

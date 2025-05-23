@@ -2,6 +2,7 @@ package com.swingy.view.gui;
 
 import com.swingy.controller.GameController;
 import com.swingy.model.hero.Hero;
+import com.swingy.model.map.GameMap;
 import com.swingy.model.map.Tile;
 import com.swingy.model.villain.Villain;
 import com.swingy.view.View;
@@ -18,7 +19,7 @@ public class GUIView implements View {
     }
 
     @Override
-    public void showMap(Tile[][] map, int heroX, int heroY) {
+    public void showMap(GameMap gameMap) {
 
     }
 

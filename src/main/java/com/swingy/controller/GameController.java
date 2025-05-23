@@ -1,6 +1,8 @@
 package com.swingy.controller;
 
 import com.swingy.model.hero.Hero;
+import com.swingy.model.map.GameMap;
+import com.swingy.service.MapService;
 import com.swingy.storage.HeroDbRepository;
 import com.swingy.view.View;
 
@@ -14,6 +16,8 @@ public class GameController {
     private final HeroDbRepository heroRepository;
     private final HeroLoader heroLoader;
     public HeroCreationInput heroCreationInput;
+    private MapService mapService;
+    private GameMap gameMap;
 
     public GameController(View viewType) {
         this.currentView = viewType;
@@ -80,7 +84,7 @@ public class GameController {
         Hero loadedHero = heroLoader.loadHero(heroName);
         if (loadedHero != null) {
             this.currentHero = loadedHero;
-            startGame();
+            startNewGame();
         } else {
             this.currentView.requestLoadOrCreate(this);
         }
@@ -90,9 +94,12 @@ public class GameController {
         this.currentHero = hero;
     }
 
-    protected void startGame() {
+    protected void startNewGame() {
         this.currentView.showMessage("Game starting with hero: " + currentHero.getName());
         this.currentView.showHeroStats(currentHero);
+        mapService = new MapService(this.currentHero);
+        gameMap = mapService.getGameMap();
+        this.currentView.showMap(gameMap);
     }
 
 }
