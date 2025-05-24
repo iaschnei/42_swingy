@@ -15,6 +15,8 @@ public class ConsoleView implements View {
     public ConsoleView() {}
 
     GameController controller;
+    
+    
 
     @Override
     public void showHeroStats(Hero hero) {
@@ -73,7 +75,12 @@ public class ConsoleView implements View {
 
     @Override
     public void showVillain(Villain villain) {
-
+        System.out.println("\n=== Villain Stats ===");
+        System.out.println("Level: " + villain.getLevel());
+        System.out.println("HP: " + villain.getHp());
+        System.out.println("Attack: " + villain.getAttack());
+        System.out.println("Defense: " + villain.getDefense());
+        System.out.println("==================\n");
     }
 
     @Override
@@ -201,7 +208,14 @@ public class ConsoleView implements View {
     }
 
     @Override
-    public void requestBattleDecision(Villain villain) {
-
+    public void requestBattleDecision(Villain villain, int escapeChance) {
+        System.out.println("Oh no ! You encountered an enemy !");
+        System.out.println("What do you want to do?");
+        System.out.println("-- Fight");
+        System.out.println("-- Escape (" + escapeChance + "% chance)");
+        System.out.print("-> ");
+        Scanner scanner = new Scanner(System.in);
+        String decision = scanner.nextLine();
+        this.controller.onBattleDecision(decision);
     }
 }

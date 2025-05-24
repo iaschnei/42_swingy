@@ -2,6 +2,7 @@ package com.swingy.service;
 
 import com.swingy.model.hero.Hero;
 import com.swingy.model.map.GameMap;
+import com.swingy.model.villain.Villain;
 
 import java.util.Random;
 
@@ -57,6 +58,7 @@ public class MapService {
 
             if (!(h == center && w == center) && !gameMap.getTile(h, w).isEnemy()) {
                 gameMap.setEnemyOnTile(h, w, true);
+                gameMap.getTile(h, w).setEnemy(new Villain(this.hero, h, w));
                 enemyCount--;
             }
         }

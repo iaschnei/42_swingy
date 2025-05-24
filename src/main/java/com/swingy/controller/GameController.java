@@ -2,12 +2,15 @@ package com.swingy.controller;
 
 import com.swingy.model.hero.Hero;
 import com.swingy.model.map.GameMap;
+import com.swingy.model.villain.Villain;
+import com.swingy.service.BattleService;
 import com.swingy.service.MapService;
 import com.swingy.storage.HeroDbRepository;
 import com.swingy.view.View;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Random;
 
 public class GameController {
 
@@ -18,6 +21,9 @@ public class GameController {
     public HeroCreationInput heroCreationInput;
     private MapService mapService;
     private GameMap gameMap;
+    private String savedDirection;
+    private Villain savedVillain;
+    private int savedEscapeChance;
 
     public GameController(View viewType) {
         this.currentView = viewType;
@@ -94,6 +100,72 @@ public class GameController {
         this.currentHero = hero;
     }
 
+    public void onHeroMovement(String direction) {
+        this.savedEscapeChance = 50;
+        if (currentHero.isPowerEscape()) {
+            this.savedEscapeChance += 15;
+        }
+
+        switch (direction) {
+            case "N":
+                if (gameMap.getTile(currentHero.getYPos() + 1, currentHero.getXPos()).isEnemy()) {
+                    this.savedDirection = direction;
+                    this.savedVillain = gameMap.getTile(currentHero.getYPos() + 1, currentHero.getXPos()).getEnemy();
+                    this.currentView.showHeroStats(currentHero);
+                    this.currentView.showVillain(this.savedVillain);
+                    this.currentView.requestBattleDecision(this.savedVillain, this.savedEscapeChance);
+                }
+                else {
+                    currentHero.setYPos(currentHero.getYPos() + 1);
+                }
+                break;
+            case "S":
+                if (gameMap.getTile(currentHero.getYPos() - 1, currentHero.getXPos()).isEnemy()) {
+                    this.savedDirection = direction;
+                    this.savedVillain = gameMap.getTile(currentHero.getYPos() - 1, currentHero.getXPos()).getEnemy();
+                    this.currentView.showHeroStats(currentHero);
+                    this.currentView.showVillain(this.savedVillain);
+                    this.currentView.requestBattleDecision(this.savedVillain, this.savedEscapeChance);
+                }
+                else {
+                    currentHero.setYPos(currentHero.getYPos() - 1);
+                }
+                break;
+            case "E":
+                if (gameMap.getTile(currentHero.getYPos(), currentHero.getXPos() + 1).isEnemy()) {
+                    this.savedDirection = direction;
+                    this.savedVillain = gameMap.getTile(currentHero.getYPos(), currentHero.getXPos() + 1).getEnemy();
+                    this.currentView.showHeroStats(currentHero);
+                    this.currentView.showVillain(this.savedVillain);
+                    this.currentView.requestBattleDecision(this.savedVillain, this.savedEscapeChance);
+                }
+                else {
+                    currentHero.setYPos(currentHero.getXPos() + 1);
+                }
+                break;
+            case "W":
+                if (gameMap.getTile(currentHero.getYPos(), currentHero.getXPos() - 1).isEnemy()) {
+                    this.savedDirection = direction;
+                    this.savedVillain = gameMap.getTile(currentHero.getYPos(), currentHero.getXPos() - 1).getEnemy();
+                    this.currentView.showHeroStats(currentHero);
+                    this.currentView.showVillain(this.savedVillain);
+                    this.currentView.requestBattleDecision(this.savedVillain, this.savedEscapeChance);
+                }
+                else {
+                    currentHero.setYPos(currentHero.getXPos() - 1);
+                }
+                break;
+            default:
+                this.currentView.showError("Invalid direction");
+                this.currentView.requestMovement();
+        }
+
+        if (currentHero.getXPos() < 0 || currentHero.getXPos() >= gameMap.getSize() || currentHero.getYPos() < 0 || currentHero.getYPos() >= gameMap.getSize()) {
+            this.currentView.showVictory();
+            this.currentView.requestLoadOrCreate(this);
+        }
+    }
+
     protected void startNewGame() {
         this.currentView.showMessage("Game starting with hero: " + currentHero.getName());
         this.currentView.showHeroStats(currentHero);
@@ -102,5 +174,39 @@ public class GameController {
         this.currentView.showMap(gameMap);
     }
 
+    public void onBattleDecision(String decision) {
+
+        switch (decision) {
+            case "Fight":
+                BattleService battle = new BattleService(this.currentHero, this.savedVillain);
+                if (battle.isBattleWon()) {
+                    gameMap.setHeroOnTile(currentHero.getXPos(), currentHero.getYPos(), false);
+                    gameMap.setVisitedOnTile(currentHero.getXPos(), currentHero.getYPos(), true);
+                    gameMap.getTile(this.savedVillain.getPosY(), this.savedVillain.getPosX()).setIsEnemy(false);
+                    this.currentView.showBattleResult(true, this.savedVillain);
+                    if (battle.didLevelUp()) {
+                        this.currentView.showLevelUp(this.currentHero);
+                    }
+                    this.onHeroMovement(this.savedDirection);
+                    this.currentView.requestMovement();
+                }
+                break;
+            case "Escape":
+                int random = new Random().nextInt(100);
+                if (random < this.savedEscapeChance) {
+                    this.currentView.showMessage("You escaped successfully!");
+                    this.savedVillain = null;
+                    this.savedDirection = null;
+                    this.currentView.requestMovement();
+                } else {
+                    this.currentView.showMessage("You failed to escape! Time to fight!");
+                    this.onBattleDecision("Fight");
+                }
+                break;
+            default:
+                this.currentView.showError("Invalid input, please choose between Fight and Escape");
+                this.currentView.requestBattleDecision(this.savedVillain, this.savedEscapeChance);
+        }
+    }
 }
 

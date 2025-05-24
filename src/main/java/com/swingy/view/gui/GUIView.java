@@ -94,7 +94,7 @@ public class GUIView implements View {
     }
 
     @Override
-    public void requestBattleDecision(Villain villain) {
+    public void requestBattleDecision(Villain villain, int escapeChance) {
 
     }
 }

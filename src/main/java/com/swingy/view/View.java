@@ -31,5 +31,5 @@ public interface View {
     void requestGameStartConfirm();
     void requestHeroSelection(List<String> heroes);
     void requestMovement();
-    void requestBattleDecision(Villain villain);
+    void requestBattleDecision(Villain villain, int escapeChance);
 }

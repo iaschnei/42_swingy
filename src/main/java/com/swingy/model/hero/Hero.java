@@ -32,6 +32,7 @@ public class Hero {
 
     // Base stats
     private int hp;
+    private int maxHp;
     private int defense;
     private int attack;
     private int level;
@@ -75,6 +76,8 @@ public class Hero {
                 this.setPowerEscape(true);
             }
         }
+
+        this.setMaxHp(this.hp);
     }
 
     // Getters and setters
@@ -95,6 +98,9 @@ public class Hero {
 
     public int getHp() { return hp; }
     public void setHp(int hp) { this.hp = hp; }
+
+    public int getMaxHp() { return maxHp; }
+    public void setMaxHp(int maxHp) { this.maxHp = maxHp; }
 
     public int getDefense() { return defense; }
     public void setDefense(int defense) { this.defense = defense; }

@@ -1,10 +1,13 @@
 package com.swingy.model.map;
 
+import com.swingy.model.villain.Villain;
+
 public class Tile {
 
-    public boolean isEnemy;
-    public boolean isHero;
-    public boolean isVisited;
+    private boolean isEnemy;
+    private boolean isHero;
+    private boolean isVisited;
+    private Villain enemy;
 
     public Tile() {
     }
@@ -19,6 +22,14 @@ public class Tile {
 
     public boolean isVisited() {
         return isVisited;
+    }
+
+    public Villain getEnemy() {
+        return enemy;
+    }
+
+    public void setEnemy(Villain enemy) {
+        this.enemy = enemy;
     }
 
     public void setIsEnemy(boolean isEnemy) {
