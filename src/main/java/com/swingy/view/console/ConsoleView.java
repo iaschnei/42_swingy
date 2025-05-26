@@ -70,7 +70,19 @@ public class ConsoleView implements View {
 
     @Override
     public void showBattleResult(boolean success, Villain villain) {
-
+        if (success) {
+            System.out.println("\n=== Battle Result ===");
+            System.out.println("You've won this battle!");
+            System.out.println("The enemy has been defeated and your experience has been increased!");
+            System.out.println("==================\n");
+        }
+        else {
+            System.out.println("\n=== Battle Result ===");
+            System.out.println("You've lost this battle!");
+            System.out.println("Your hero is dead and you have to start over!");
+            System.out.println("The villain still had " + villain.getHp() + "HP left...");
+            System.out.println("==================\n");
+        }
     }
 
     @Override
@@ -85,7 +97,34 @@ public class ConsoleView implements View {
 
     @Override
     public void showLevelUp(Hero hero) {
+        System.out.println("Your hero leveled up!");
+        System.out.println("You are back to full health and have gained:");
+        System.out.println(" +3 max hp");
+        System.out.println(" +2 attack");
+        System.out.println(" +2 defense");
+    }
 
+    @Override
+    public void showExperienceProgress(Hero hero) {
+        int level = hero.getLevel();
+        int currentExp = hero.getExperience();
+        int necessaryExp = level * 1000 + (((level - 1) * (level - 1)) * 450);
+
+        double percentage = (double) currentExp / necessaryExp * 100;
+        int barLength = 20;
+        int filledLength = (int) (barLength * percentage / 100);
+
+        StringBuilder progressBar = new StringBuilder("[");
+        for (int i = 0; i < barLength; i++) {
+            if (i < filledLength) {
+                progressBar.append("=");
+            } else {
+                progressBar.append(" ");
+            }
+        }
+        progressBar.append("]");
+
+        System.out.println("Experience: " + currentExp + "/" + necessaryExp + " " + progressBar + " " + percentage + "%)");
     }
 
     @Override
@@ -204,7 +243,8 @@ public class ConsoleView implements View {
         System.out.println("- N - S - E - W -");
         System.out.print("-> ");
         Scanner scanner = new Scanner(System.in);
-        String heroName = scanner.nextLine();
+        String direction = scanner.nextLine();
+        this.controller.onHeroMovement(direction);
     }
 
     @Override

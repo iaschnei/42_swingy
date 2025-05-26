@@ -16,6 +16,7 @@ public interface View {
     void showBattleResult(boolean success, Villain villain);
     void showVillain(Villain villain);
     void showLevelUp(Hero hero);
+    void showExperienceProgress(Hero hero);
     void showVictory();
     void showGameOver();
 

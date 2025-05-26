@@ -10,7 +10,6 @@ public class BattleService {
     private boolean battleWon;
     private final Hero hero;
     private final Villain villain;
-    private HeroService heroService;
     private boolean didLevelUp;
 
     public BattleService(Hero hero, Villain villain) {
@@ -26,7 +25,7 @@ public class BattleService {
         }
 
         if (battleWon) {
-            heroService = new HeroService(hero, villain);
+            HeroService heroService = new HeroService(hero, villain);
             if (heroService.didLevelUp()) {
                 this.didLevelUp = true;
             }
@@ -38,21 +37,37 @@ public class BattleService {
             if (attacker instanceof Hero) {
                 int damage = calculateDamage(hero.getAttack(), villain.getDefense());
                 villain.setHp(villain.getHp() - damage);
-                if (villain.getHp() <= 0) {
+                if (villain.getHp() <= 0 || (hero.isPowerExecute() && villain.getHp() <= 3)) {
                     battleWon = true;
                     break;
                 }
                 damage = calculateDamage(villain.getAttack(), hero.getDefense());
                 hero.setHp(hero.getHp() - damage);
+                if (hero.getHp() <= 0) {
+                    if (hero.isPowerSecondChance()) {
+                        hero.setPowerSecondChance(false);
+                    } else {
+                        battleWon = false;
+                        break;
+                    }
+                }
             } else {
                 int damage = calculateDamage(villain.getAttack(), hero.getDefense());
                 hero.setHp(hero.getHp() - damage);
                 if (hero.getHp() <= 0) {
-                    battleWon = false;
-                    break;
+                    if (hero.isPowerSecondChance()) {
+                        hero.setPowerSecondChance(false);
+                    } else {
+                        battleWon = false;
+                        break;
+                    }
                 }
                 damage = calculateDamage(hero.getAttack(), villain.getDefense());
                 villain.setHp(villain.getHp() - damage);
+                if (villain.getHp() <= 0 || (hero.isPowerExecute() && villain.getHp() <= 3)) {
+                    battleWon = true;
+                    break;
+                }
             }
         }
     }

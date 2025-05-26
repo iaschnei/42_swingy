@@ -35,6 +35,9 @@ public class Villain {
 
     public void setLevel(int level) {
         this.level = level;
+        this.attack = this.level * 2;
+        this.defense = this.level * 2;
+        this.hp = this.level * 5;
     }
 
     public int getHp() {

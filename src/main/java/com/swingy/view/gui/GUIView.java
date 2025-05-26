@@ -39,6 +39,11 @@ public class GUIView implements View {
     }
 
     @Override
+    public void showExperienceProgress(Hero hero) {
+
+    }
+
+    @Override
     public void showVictory() {
 
     }

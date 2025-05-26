@@ -106,89 +106,88 @@ public class GameController {
             this.savedEscapeChance += 15;
         }
 
+        int nextY = currentHero.getYPos();
+        int nextX = currentHero.getXPos();
+
         switch (direction) {
-            case "N":
-                if (gameMap.getTile(currentHero.getYPos() + 1, currentHero.getXPos()).isEnemy()) {
-                    this.savedDirection = direction;
-                    this.savedVillain = gameMap.getTile(currentHero.getYPos() + 1, currentHero.getXPos()).getEnemy();
-                    this.currentView.showHeroStats(currentHero);
-                    this.currentView.showVillain(this.savedVillain);
-                    this.currentView.requestBattleDecision(this.savedVillain, this.savedEscapeChance);
-                }
-                else {
-                    currentHero.setYPos(currentHero.getYPos() + 1);
-                }
-                break;
-            case "S":
-                if (gameMap.getTile(currentHero.getYPos() - 1, currentHero.getXPos()).isEnemy()) {
-                    this.savedDirection = direction;
-                    this.savedVillain = gameMap.getTile(currentHero.getYPos() - 1, currentHero.getXPos()).getEnemy();
-                    this.currentView.showHeroStats(currentHero);
-                    this.currentView.showVillain(this.savedVillain);
-                    this.currentView.requestBattleDecision(this.savedVillain, this.savedEscapeChance);
-                }
-                else {
-                    currentHero.setYPos(currentHero.getYPos() - 1);
-                }
-                break;
-            case "E":
-                if (gameMap.getTile(currentHero.getYPos(), currentHero.getXPos() + 1).isEnemy()) {
-                    this.savedDirection = direction;
-                    this.savedVillain = gameMap.getTile(currentHero.getYPos(), currentHero.getXPos() + 1).getEnemy();
-                    this.currentView.showHeroStats(currentHero);
-                    this.currentView.showVillain(this.savedVillain);
-                    this.currentView.requestBattleDecision(this.savedVillain, this.savedEscapeChance);
-                }
-                else {
-                    currentHero.setYPos(currentHero.getXPos() + 1);
-                }
-                break;
-            case "W":
-                if (gameMap.getTile(currentHero.getYPos(), currentHero.getXPos() - 1).isEnemy()) {
-                    this.savedDirection = direction;
-                    this.savedVillain = gameMap.getTile(currentHero.getYPos(), currentHero.getXPos() - 1).getEnemy();
-                    this.currentView.showHeroStats(currentHero);
-                    this.currentView.showVillain(this.savedVillain);
-                    this.currentView.requestBattleDecision(this.savedVillain, this.savedEscapeChance);
-                }
-                else {
-                    currentHero.setYPos(currentHero.getXPos() - 1);
-                }
-                break;
-            default:
+            case "N" -> nextY -= 1;
+            case "S" -> nextY += 1;
+            case "E" -> nextX += 1;
+            case "W" -> nextX -= 1;
+            default -> {
                 this.currentView.showError("Invalid direction");
                 this.currentView.requestMovement();
+                return;
+            }
         }
 
-        if (currentHero.getXPos() < 0 || currentHero.getXPos() >= gameMap.getSize() || currentHero.getYPos() < 0 || currentHero.getYPos() >= gameMap.getSize()) {
+        if (nextX < 0 || nextX >= gameMap.getSize() || nextY < 0 || nextY >= gameMap.getSize()) {
             this.currentView.showVictory();
             this.currentView.requestLoadOrCreate(this);
+            return;
         }
-    }
 
-    protected void startNewGame() {
-        this.currentView.showMessage("Game starting with hero: " + currentHero.getName());
-        this.currentView.showHeroStats(currentHero);
-        mapService = new MapService(this.currentHero);
-        gameMap = mapService.getGameMap();
-        this.currentView.showMap(gameMap);
+        if (gameMap.getTile(nextY, nextX).isEnemy()) {
+            this.savedDirection = direction;
+            this.savedVillain = gameMap.getTile(nextY, nextX).getEnemy();
+            this.currentView.showHeroStats(currentHero);
+            this.currentView.showVillain(this.savedVillain);
+            this.currentView.requestBattleDecision(this.savedVillain, this.savedEscapeChance);
+        } else {
+            int oldX = currentHero.getXPos();
+            int oldY = currentHero.getYPos();
+
+            currentHero.setXPos(nextX);
+            currentHero.setYPos(nextY);
+
+            gameMap.setHeroOnTile(oldY, oldX, false);
+            gameMap.setVisitedOnTile(oldY, oldX, true);
+            gameMap.setHeroOnTile(nextY, nextX, true);
+            gameMap.setVisitedOnTile(nextY, nextX, true);
+            
+            this.currentView.showMap(gameMap);
+            this.currentView.requestMovement();
+        }
     }
 
     public void onBattleDecision(String decision) {
-
         switch (decision) {
             case "Fight":
                 BattleService battle = new BattleService(this.currentHero, this.savedVillain);
                 if (battle.isBattleWon()) {
-                    gameMap.setHeroOnTile(currentHero.getXPos(), currentHero.getYPos(), false);
-                    gameMap.setVisitedOnTile(currentHero.getXPos(), currentHero.getYPos(), true);
-                    gameMap.getTile(this.savedVillain.getPosY(), this.savedVillain.getPosX()).setIsEnemy(false);
+                    int oldX = currentHero.getXPos();
+                    int oldY = currentHero.getYPos();
+                    int nextY = oldY;
+                    int nextX = oldX;
+
+                    switch (this.savedDirection) {
+                        case "N" -> nextY -= 1;
+                        case "S" -> nextY += 1;
+                        case "E" -> nextX += 1;
+                        case "W" -> nextX -= 1;
+                    }
+
+                    gameMap.setHeroOnTile(oldY, oldX, false);
+                    gameMap.setVisitedOnTile(oldY, oldX, true);
+                    gameMap.getTile(nextY, nextX).setIsEnemy(false);
+                    gameMap.getTile(nextY, nextX).setEnemy(null);
+
+                    currentHero.setXPos(nextX);
+                    currentHero.setYPos(nextY);
+                    gameMap.setHeroOnTile(nextY, nextX, true);
+                    gameMap.setVisitedOnTile(nextY, nextX, true);
+                    
                     this.currentView.showBattleResult(true, this.savedVillain);
                     if (battle.didLevelUp()) {
                         this.currentView.showLevelUp(this.currentHero);
                     }
-                    this.onHeroMovement(this.savedDirection);
+                    this.currentView.showExperienceProgress(this.currentHero);
+                    this.currentView.showMap(gameMap);
                     this.currentView.requestMovement();
+                } else {
+                    this.currentView.showBattleResult(false, this.savedVillain);
+                    this.currentView.showGameOver();
+                    this.currentView.requestLoadOrCreate(this);
                 }
                 break;
             case "Escape":
@@ -208,5 +207,32 @@ public class GameController {
                 this.currentView.requestBattleDecision(this.savedVillain, this.savedEscapeChance);
         }
     }
-}
 
+    protected void startNewGame() {
+        this.currentView.showMessage("Game starting with hero: " + currentHero.getName());
+        this.currentView.showHeroStats(currentHero);
+        mapService = new MapService(this.currentHero);
+        gameMap = mapService.getGameMap();
+        this.currentView.showMap(gameMap);
+        this.currentView.requestMovement();
+    }
+
+    private void updateHeroPosition(int oldX, int oldY) {
+
+
+        gameMap.setHeroOnTile(oldY, oldX, false);
+        gameMap.setVisitedOnTile(oldY, oldX, true);
+
+        // If we're at the edge already, we've won!
+        if (currentHero.getXPos() < 0 || currentHero.getXPos() >= gameMap.getSize() || currentHero.getYPos() < 0 || currentHero.getYPos() >= gameMap.getSize()) {
+            this.currentView.showVictory();
+            this.currentView.requestLoadOrCreate(this);
+        }
+
+        gameMap.setHeroOnTile(currentHero.getYPos(), currentHero.getXPos(), true);
+        gameMap.setVisitedOnTile(currentHero.getYPos(), currentHero.getXPos(), true);
+
+        this.currentView.showMap(gameMap);
+        this.currentView.requestMovement();
+    }
+}
