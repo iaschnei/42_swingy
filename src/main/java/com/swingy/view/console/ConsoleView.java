@@ -1,6 +1,7 @@
 package com.swingy.view.console;
 
 import com.swingy.controller.GameController;
+import com.swingy.model.artifact.Artifact;
 import com.swingy.model.hero.Hero;
 import com.swingy.model.map.GameMap;
 import com.swingy.model.map.Tile;
@@ -30,6 +31,15 @@ public class ConsoleView implements View {
         System.out.println("Defense: " + hero.getDefense());
         System.out.println("Position: (" + hero.getXPos() + ", " + hero.getYPos() + ")");
         System.out.println("Special Power: " + getHeroPower(hero));
+        
+        // Add artifact information
+        if (hero.getArtifact() != null) {
+            System.out.println("Artifact: Level " + hero.getArtifact().getLevel() + " " + 
+                             hero.getArtifact().getType() + " (+" + 
+                             getArtifactBonus(hero.getArtifact()) + ")");
+        } else {
+            System.out.println("Artifact: None");
+        }
         System.out.println("================\n");
     }
 
@@ -92,6 +102,10 @@ public class ConsoleView implements View {
         System.out.println("HP: " + villain.getHp());
         System.out.println("Attack: " + villain.getAttack());
         System.out.println("Defense: " + villain.getDefense());
+        if (villain.getArtifact() != null) {
+            System.out.println("Carries: Level " + villain.getArtifact().getLevel() + " " + 
+                             villain.getArtifact().getType());
+        }
         System.out.println("==================\n");
     }
 
@@ -257,5 +271,45 @@ public class ConsoleView implements View {
         Scanner scanner = new Scanner(System.in);
         String decision = scanner.nextLine();
         this.controller.onBattleDecision(decision);
+    }
+
+    private String getArtifactBonus(Artifact artifact) {
+        int bonus = artifact.getLevel();
+        switch (artifact.getType()) {
+            case "Helm" -> { return bonus + " HP"; }
+            case "Weapon" -> { return bonus + " Attack"; }
+            case "Armor" -> { return bonus + " Defense"; }
+            default -> { return "0"; }
+        }
+    }
+
+    @Override
+    public void showArtifactDrop(Villain villain) {
+        System.out.println("\n=== Artifact Dropped ===");
+        System.out.println("The villain dropped: Level " + villain.getArtifact().getLevel() + " " + 
+                          villain.getArtifact().getType() + " (+" + 
+                          getArtifactBonus(villain.getArtifact()) + ")");
+        System.out.println("==================\n");
+    }
+
+    @Override
+    public void requestArtifactDecision(Hero hero, Villain villain) {
+        System.out.println("Do you want to equip the new artifact?");
+        if (hero.getArtifact() != null) {
+            System.out.println("Current: Level " + hero.getArtifact().getLevel() + " " + 
+                             hero.getArtifact().getType() + " (+" + 
+                             getArtifactBonus(hero.getArtifact()) + ")");
+        } else {
+            System.out.println("Current: None");
+        }
+        System.out.println("New: Level " + villain.getArtifact().getLevel() + " " + 
+                          villain.getArtifact().getType() + " (+" + 
+                          getArtifactBonus(villain.getArtifact()) + ")");
+        System.out.println("-- Yes");
+        System.out.println("-- No");
+        System.out.print("-> ");
+        Scanner scanner = new Scanner(System.in);
+        String decision = scanner.nextLine();
+        this.controller.onArtifactDecision(decision);
     }
 }

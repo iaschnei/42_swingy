@@ -17,6 +17,7 @@ public interface View {
     void showVillain(Villain villain);
     void showLevelUp(Hero hero);
     void showExperienceProgress(Hero hero);
+    void showArtifactDrop(Villain villain);
     void showVictory();
     void showGameOver();
 
@@ -33,4 +34,5 @@ public interface View {
     void requestHeroSelection(List<String> heroes);
     void requestMovement();
     void requestBattleDecision(Villain villain, int escapeChance);
+    void requestArtifactDecision(Hero hero, Villain villain);
 }

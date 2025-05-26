@@ -1,5 +1,6 @@
 package com.swingy.model.hero;
 
+import com.swingy.model.artifact.Artifact;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -47,7 +48,7 @@ public class Hero {
     private boolean powerExecute;
     private boolean powerEscape;
 
-    //TODO Add an artifact slot
+    private Artifact artifact;
 
     public void initHero(String className) {
         this.setClassName(className);
@@ -78,6 +79,14 @@ public class Hero {
         }
 
         this.setMaxHp(this.hp);
+    }
+
+    public void applyArtifactEffect() {
+        switch (this.artifact.getType()) {
+            case "Helm" -> this.setHp(this.hp + this.artifact.getLevel());
+            case "Weapon" -> this.setAttack(this.attack + this.artifact.getLevel());
+            case "Armor" -> this.setDefense(this.defense + this.artifact.getLevel());
+        }
     }
 
     // Getters and setters
@@ -119,4 +128,10 @@ public class Hero {
 
     public int getYPos() { return yPos; }
     public void setYPos(int yPos) { this.yPos = yPos; }
+
+    public Artifact getArtifact() { return artifact; }
+    public void setArtifact(Artifact artifact) {
+        this.artifact = artifact;
+        this.applyArtifactEffect();
+    }
 }

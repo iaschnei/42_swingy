@@ -102,4 +102,14 @@ public class GUIView implements View {
     public void requestBattleDecision(Villain villain, int escapeChance) {
 
     }
+
+    @Override
+    public void showArtifactDrop(Villain villain) {
+
+    }
+
+    @Override
+    public void requestArtifactDecision(Hero hero, Villain villain) {
+
+    }
 }

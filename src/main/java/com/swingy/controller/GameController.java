@@ -1,5 +1,6 @@
 package com.swingy.controller;
 
+import com.swingy.model.artifact.Artifact;
 import com.swingy.model.hero.Hero;
 import com.swingy.model.map.GameMap;
 import com.swingy.model.villain.Villain;
@@ -182,8 +183,10 @@ public class GameController {
                         this.currentView.showLevelUp(this.currentHero);
                     }
                     this.currentView.showExperienceProgress(this.currentHero);
-                    this.currentView.showMap(gameMap);
-                    this.currentView.requestMovement();
+
+                    this.currentView.showArtifactDrop(this.savedVillain);
+                    this.currentView.requestArtifactDecision(this.currentHero, this.savedVillain);
+
                 } else {
                     this.currentView.showBattleResult(false, this.savedVillain);
                     this.currentView.showGameOver();
@@ -235,4 +238,36 @@ public class GameController {
         this.currentView.showMap(gameMap);
         this.currentView.requestMovement();
     }
+
+    public void onArtifactDecision(String decision) {
+        switch (decision) {
+            case "Yes":
+                if (this.currentHero.getArtifact() != null) {
+                    Artifact oldArtifact = this.currentHero.getArtifact();
+                    switch (oldArtifact.getType()) {
+                        case "Helm" -> this.currentHero.setMaxHp(this.currentHero.getMaxHp() - (oldArtifact.getLevel()));
+                        case "Weapon" -> this.currentHero.setAttack(this.currentHero.getAttack() - (oldArtifact.getLevel()));
+                        case "Armor" -> this.currentHero.setDefense(this.currentHero.getDefense() - (oldArtifact.getLevel()));
+                    }
+                }
+
+                Artifact newArtifact = this.savedVillain.getArtifact();
+                this.currentHero.setArtifact(newArtifact);
+                this.currentView.showMessage("New artifact equipped!");
+                break;
+
+            case "No":
+                this.currentView.showMessage("Artifact discarded!");
+                break;
+
+            default:
+                this.currentView.showError("Invalid choice!");
+                this.currentView.requestArtifactDecision(this.currentHero, this.savedVillain);
+                return;
+        }
+
+        this.currentView.showMap(gameMap);
+        this.currentView.requestMovement();
+    }
+
 }
