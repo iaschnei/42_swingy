@@ -4,7 +4,6 @@ import com.swingy.controller.GameController;
 import com.swingy.model.artifact.Artifact;
 import com.swingy.model.hero.Hero;
 import com.swingy.model.map.GameMap;
-import com.swingy.model.map.Tile;
 import com.swingy.model.villain.Villain;
 import com.swingy.view.View;
 
@@ -143,14 +142,18 @@ public class ConsoleView implements View {
 
     @Override
     public void showVictory() {
+        System.out.println("\n=== Victory ===");
         System.out.println("Congratulations! You won!");
         System.out.println("You should play again with a different class!");
+        System.out.println("==================\n");
     }
 
     @Override
     public void showGameOver() {
+        System.out.println("\n=== Game Over ===");
         System.out.println("Ouch! You lost");
         System.out.println("Maybe try again with a different class or strategy!");
+        System.out.println("==================\n");
     }
 
     @Override

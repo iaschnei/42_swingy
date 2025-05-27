@@ -35,21 +35,13 @@ public class MapService {
         this.gameMap.setVisitedOnTile(center, center, true);
     }
 
-    public boolean[][] getVisitedPositions() {
-        return visitedPositions;
-    }
-
-    public boolean isValidPosition(int x, int y) {
-        return x >= 0 && x < mapSize && y >= 0 && y < mapSize;
-    }
-
     public GameMap getGameMap() {
         return this.gameMap;
     }
 
     private void populateGameMap() {
         Random random = new Random();
-        int enemyCount = hero.getLevel() * 5 + 7;
+        int enemyCount = hero.getLevel() * 7 + 10;
         int center = mapSize / 2;
 
         while (enemyCount > 0) {

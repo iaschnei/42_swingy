@@ -20,7 +20,6 @@ public class GameController {
     private final HeroDbRepository heroRepository;
     private final HeroLoader heroLoader;
     public HeroCreationInput heroCreationInput;
-    private MapService mapService;
     private GameMap gameMap;
     private String savedDirection;
     private Villain savedVillain;
@@ -124,6 +123,13 @@ public class GameController {
 
         if (nextX < 0 || nextX >= gameMap.getSize() || nextY < 0 || nextY >= gameMap.getSize()) {
             this.currentView.showVictory();
+            try {
+                this.heroRepository.updateHero(this.currentHero);
+            }
+            catch (SQLException e) {
+                //noinspection CallToPrintStackTrace
+                e.printStackTrace();
+            }
             this.currentView.requestLoadOrCreate(this);
             return;
         }
@@ -190,6 +196,13 @@ public class GameController {
                 } else {
                     this.currentView.showBattleResult(false, this.savedVillain);
                     this.currentView.showGameOver();
+                    try {
+                        this.heroRepository.deleteSave(this.currentHero.getName());
+                    }
+                    catch (SQLException e) {
+                        //noinspection CallToPrintStackTrace
+                        e.printStackTrace();
+                    }
                     this.currentView.requestLoadOrCreate(this);
                 }
                 break;
@@ -214,27 +227,8 @@ public class GameController {
     protected void startNewGame() {
         this.currentView.showMessage("Game starting with hero: " + currentHero.getName());
         this.currentView.showHeroStats(currentHero);
-        mapService = new MapService(this.currentHero);
+        MapService mapService = new MapService(this.currentHero);
         gameMap = mapService.getGameMap();
-        this.currentView.showMap(gameMap);
-        this.currentView.requestMovement();
-    }
-
-    private void updateHeroPosition(int oldX, int oldY) {
-
-
-        gameMap.setHeroOnTile(oldY, oldX, false);
-        gameMap.setVisitedOnTile(oldY, oldX, true);
-
-        // If we're at the edge already, we've won!
-        if (currentHero.getXPos() < 0 || currentHero.getXPos() >= gameMap.getSize() || currentHero.getYPos() < 0 || currentHero.getYPos() >= gameMap.getSize()) {
-            this.currentView.showVictory();
-            this.currentView.requestLoadOrCreate(this);
-        }
-
-        gameMap.setHeroOnTile(currentHero.getYPos(), currentHero.getXPos(), true);
-        gameMap.setVisitedOnTile(currentHero.getYPos(), currentHero.getXPos(), true);
-
         this.currentView.showMap(gameMap);
         this.currentView.requestMovement();
     }

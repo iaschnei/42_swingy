@@ -24,7 +24,7 @@ public class HeroDbRepository {
         }
     }
 
-    public void saveHero(Hero hero) throws SQLException {
+    public void saveNewHero(Hero hero) throws SQLException {
         if (!canAddHero()) {
             throw new SQLException("Maximum number of heroes (" + MAX_HEROES + ") reached. Delete a save first.");
         }
@@ -54,6 +54,33 @@ public class HeroDbRepository {
             pstmt.setBoolean(12, hero.isPowerEscape());
             
             pstmt.executeUpdate();
+        }
+    }
+
+    public void updateHero(Hero hero) throws SQLException {
+        String sql = "UPDATE HERO SET class_name=?, hp=?, def=?, atk=?, level=?, exp=?, x_pos=?, y_pos=?, " +
+                "power_second_chance=?, power_execute=?, power_escape=? WHERE name=?";
+
+        try (Connection conn = DbUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, hero.getClassName());
+            pstmt.setInt(2, hero.getHp());
+            pstmt.setInt(3, hero.getDefense());
+            pstmt.setInt(4, hero.getAttack());
+            pstmt.setInt(5, hero.getLevel());
+            pstmt.setInt(6, hero.getExperience());
+            pstmt.setInt(7, hero.getXPos());
+            pstmt.setInt(8, hero.getYPos());
+            pstmt.setBoolean(9, hero.isPowerSecondChance());
+            pstmt.setBoolean(10, hero.isPowerExecute());
+            pstmt.setBoolean(11, hero.isPowerEscape());
+            pstmt.setString(12, hero.getName());
+
+            int rowsAffected = pstmt.executeUpdate();
+            if (rowsAffected == 0) {
+                throw new SQLException("Hero '" + hero.getName() + "' not found.");
+            }
         }
     }
 
@@ -113,20 +140,6 @@ public class HeroDbRepository {
             if (rowsAffected == 0) {
                 throw new SQLException("No save found with name: " + name);
             }
-        }
-    }
-
-    public int getSaveCount() throws SQLException {
-        String sql = "SELECT COUNT(*) FROM HERO";
-        
-        try (Connection conn = DbUtil.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
-            return 0;
         }
     }
 }

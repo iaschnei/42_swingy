@@ -22,7 +22,6 @@ public class HeroLoader {
             if (hero != null) {
                 currentHero = hero;
                 view.showMessage("Hero '" + heroName + "' loaded successfully!");
-                view.showHeroStats(hero);
                 return hero;
             } else {
                 view.showError("Hero '" + heroName + "' not found!");
@@ -32,9 +31,5 @@ public class HeroLoader {
             view.showError("Error loading hero: " + e.getMessage());
             return null;
         }
-    }
-
-    public Hero getCurrentHero() {
-        return currentHero;
     }
 }

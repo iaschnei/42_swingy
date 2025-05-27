@@ -60,7 +60,7 @@ public class HeroCreationInput {
         else if (Objects.equals(input, "Yes")) {
             try {
                 this.tmp_hero.initHero(this.tmp_hero.getClassName());
-                heroRepository.saveHero(this.tmp_hero);
+                heroRepository.saveNewHero(this.tmp_hero);
                 this.gameController.setCurrentHero(this.tmp_hero);
                 this.gameController.startNewGame();
             } catch (SQLException e) {
