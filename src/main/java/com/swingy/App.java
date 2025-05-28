@@ -3,6 +3,7 @@ package com.swingy;
 import com.swingy.controller.GameController;
 import com.swingy.storage.DbUtil;
 import com.swingy.view.console.ConsoleView;
+import com.swingy.view.gui.GUIView;
 
 public class App {
 
@@ -28,7 +29,8 @@ public class App {
             }
 
             if (args[0].equals("gui")) {
-                System.out.println("Starting GUI");
+                GUIView guiView = new GUIView();
+                gameController = new GameController(guiView);
             }
             else if (args[0].equals("console")) {
                 ConsoleView consoleView = new ConsoleView();

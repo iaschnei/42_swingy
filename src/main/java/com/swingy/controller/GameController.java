@@ -183,12 +183,17 @@ public class GameController {
                     currentHero.setYPos(nextY);
                     gameMap.setHeroOnTile(nextY, nextX, true);
                     gameMap.setVisitedOnTile(nextY, nextX, true);
+
+                    this.currentView.showMap(gameMap);
                     
                     this.currentView.showBattleResult(true, this.savedVillain);
                     if (battle.didLevelUp()) {
                         this.currentView.showLevelUp(this.currentHero);
                     }
+
                     this.currentView.showExperienceProgress(this.currentHero);
+                    this.currentView.showHeroStats(this.currentHero);
+
 
                     this.currentView.showArtifactDrop(this.savedVillain);
                     this.currentView.requestArtifactDecision(this.currentHero, this.savedVillain);
@@ -212,6 +217,7 @@ public class GameController {
                     this.currentView.showMessage("You escaped successfully!");
                     this.savedVillain = null;
                     this.savedDirection = null;
+                    this.currentView.showMap(gameMap);
                     this.currentView.requestMovement();
                 } else {
                     this.currentView.showMessage("You failed to escape! Time to fight!");
@@ -248,6 +254,7 @@ public class GameController {
                 Artifact newArtifact = this.savedVillain.getArtifact();
                 this.currentHero.setArtifact(newArtifact);
                 this.currentView.showMessage("New artifact equipped!");
+                this.currentView.showHeroStats(this.currentHero);
                 break;
 
             case "No":

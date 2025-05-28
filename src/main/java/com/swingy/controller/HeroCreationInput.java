@@ -64,7 +64,8 @@ public class HeroCreationInput {
                 this.gameController.setCurrentHero(this.tmp_hero);
                 this.gameController.startNewGame();
             } catch (SQLException e) {
-                System.err.println("Error saving hero: " + e.getMessage());
+                this.gameController.currentView.showError("Error saving hero: " + e.getMessage());
+                this.gameController.currentView.requestLoadOrCreate(this.gameController);
             }
         }
         else {

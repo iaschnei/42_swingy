@@ -24,6 +24,7 @@ public class DbUtil {
                     "name VARCHAR(10) NOT NULL," +
                     "class_name VARCHAR(10) NOT NULL," +
                     "hp INT NOT NULL," +
+                    "max_hp INT NOT NULL," +
                     "def INT NOT NULL," +
                     "atk INT NOT NULL," +
                     "level INT NOT NULL," +

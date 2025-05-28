@@ -34,8 +34,8 @@ public class HeroDbRepository {
             throw new SQLException("Hero with name '" + hero.getName() + "' already exists.");
         }
 
-        String sql = "INSERT INTO HERO (name, class_name, hp, def, atk, level, exp, x_pos, y_pos, " +
-                "power_second_chance, power_execute, power_escape) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO HERO (name, class_name, hp, max_hp, def, atk, level, exp, x_pos, y_pos, " +
+                "power_second_chance, power_execute, power_escape) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         try (Connection conn = DbUtil.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -43,6 +43,31 @@ public class HeroDbRepository {
             pstmt.setString(1, hero.getName());
             pstmt.setString(2, hero.getClassName());
             pstmt.setInt(3, hero.getHp());
+            pstmt.setInt(4, hero.getMaxHp());
+            pstmt.setInt(5, hero.getDefense());
+            pstmt.setInt(6, hero.getAttack());
+            pstmt.setInt(7, hero.getLevel());
+            pstmt.setInt(8, hero.getExperience());
+            pstmt.setInt(9, hero.getXPos());
+            pstmt.setInt(10, hero.getYPos());
+            pstmt.setBoolean(11, hero.isPowerSecondChance());
+            pstmt.setBoolean(12, hero.isPowerExecute());
+            pstmt.setBoolean(13, hero.isPowerEscape());
+            
+            pstmt.executeUpdate();
+        }
+    }
+
+    public void updateHero(Hero hero) throws SQLException {
+        String sql = "UPDATE HERO SET class_name=?, hp=?, max_hp=?, def=?, atk=?, level=?, exp=?, x_pos=?, y_pos=?, " +
+                "power_second_chance=?, power_execute=?, power_escape=? WHERE name=?";
+
+        try (Connection conn = DbUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, hero.getClassName());
+            pstmt.setInt(2, hero.getHp());
+            pstmt.setInt(3, hero.getMaxHp());
             pstmt.setInt(4, hero.getDefense());
             pstmt.setInt(5, hero.getAttack());
             pstmt.setInt(6, hero.getLevel());
@@ -52,30 +77,7 @@ public class HeroDbRepository {
             pstmt.setBoolean(10, hero.isPowerSecondChance());
             pstmt.setBoolean(11, hero.isPowerExecute());
             pstmt.setBoolean(12, hero.isPowerEscape());
-            
-            pstmt.executeUpdate();
-        }
-    }
-
-    public void updateHero(Hero hero) throws SQLException {
-        String sql = "UPDATE HERO SET class_name=?, hp=?, def=?, atk=?, level=?, exp=?, x_pos=?, y_pos=?, " +
-                "power_second_chance=?, power_execute=?, power_escape=? WHERE name=?";
-
-        try (Connection conn = DbUtil.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setString(1, hero.getClassName());
-            pstmt.setInt(2, hero.getHp());
-            pstmt.setInt(3, hero.getDefense());
-            pstmt.setInt(4, hero.getAttack());
-            pstmt.setInt(5, hero.getLevel());
-            pstmt.setInt(6, hero.getExperience());
-            pstmt.setInt(7, hero.getXPos());
-            pstmt.setInt(8, hero.getYPos());
-            pstmt.setBoolean(9, hero.isPowerSecondChance());
-            pstmt.setBoolean(10, hero.isPowerExecute());
-            pstmt.setBoolean(11, hero.isPowerEscape());
-            pstmt.setString(12, hero.getName());
+            pstmt.setString(13, hero.getName());
 
             int rowsAffected = pstmt.executeUpdate();
             if (rowsAffected == 0) {
@@ -112,6 +114,7 @@ public class HeroDbRepository {
                     hero.setName(rs.getString("name"));
                     hero.setClassName(rs.getString("class_name"));
                     hero.setHp(rs.getInt("hp"));
+                    hero.setMaxHp(rs.getInt("max_hp"));
                     hero.setDefense(rs.getInt("def"));
                     hero.setAttack(rs.getInt("atk"));
                     hero.setLevel(rs.getInt("level"));
