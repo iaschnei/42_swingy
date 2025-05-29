@@ -15,10 +15,8 @@ import java.util.List;
 public class GUIView implements View {
 
     private JFrame mainFrame;
-    private JPanel mainPanel;
     private JPanel mapPanel;
     private JPanel statsPanel;
-    private JPanel messagePanel;
     private JTextArea messageArea;
     private JTextField inputField;
     private String currentState;
@@ -59,16 +57,16 @@ public class GUIView implements View {
         });
 
 
-        mainPanel = new JPanel(new BorderLayout());
+        JPanel mainPanel = new JPanel(new BorderLayout());
 
         mapPanel = new JPanel();
-        mapPanel.setBorder(BorderFactory.createTitledBorder("Main Panel"));
+        mapPanel.setBorder(BorderFactory.createTitledBorder("Map Panel"));
 
         statsPanel = new JPanel();
         statsPanel.setPreferredSize(new Dimension(200, 0));
         statsPanel.setBorder(BorderFactory.createTitledBorder("Hero Stats"));
 
-        messagePanel = new JPanel(new BorderLayout());
+        JPanel messagePanel = new JPanel(new BorderLayout());
         messagePanel.setBorder(BorderFactory.createTitledBorder("Messages"));
 
         messageArea = new JTextArea(5, 40);
@@ -94,14 +92,14 @@ public class GUIView implements View {
         inputField.setText("");
 
         switch (currentState) {
-            case "requestLoadOrCreate" -> controller.onLoadOrCreateChoice(input);
+//            case "requestLoadOrCreate" -> controller.onLoadOrCreateChoice(input);
             case "requestHeroName" -> controller.heroCreationInput.onNameInput(input);
-            case "requestHeroClass" -> controller.heroCreationInput.onClassInput(input);
-            case "requestGameStartConfirm" -> controller.heroCreationInput.onGameStartConfirm(input);
-            case "requestHeroSelection" -> controller.onHeroLoad(input);
+//            case "requestHeroClass" -> controller.heroCreationInput.onClassInput(input);
+//            case "requestGameStartConfirm" -> controller.heroCreationInput.onGameStartConfirm(input);
+//            case "requestHeroSelection" -> controller.onHeroLoad(input);
             case "requestMovement" -> controller.onHeroMovement(input);
             case "requestBattleDecision" -> controller.onBattleDecision(input);
-            case "requestArtifactDecision" -> controller.onArtifactDecision(input);
+//            case "requestArtifactDecision" -> controller.onArtifactDecision(input);
         }
     }
 
@@ -264,6 +262,7 @@ public class GUIView implements View {
 
     @Override
     public void requestLoadOrCreate(GameController controller) {
+        inputField.setEnabled(false);
         this.controller = controller;
         mapPanel.removeAll();
         mapPanel.setLayout(new GridLayout(3, 1, 10, 10));
@@ -289,6 +288,7 @@ public class GUIView implements View {
 
     @Override
     public void requestSaveToDelete(List<String> saves) {
+        inputField.setEnabled(false);
         mapPanel.removeAll();
         mapPanel.setLayout(new GridLayout(saves.size(), 1, 5, 5));
 
@@ -306,6 +306,7 @@ public class GUIView implements View {
 
     @Override
     public void requestHeroName() {
+        inputField.setEnabled(false);
         String name = JOptionPane.showInputDialog(mainFrame, "Enter your hero's name:");
         if (name == null) {
             this.requestLoadOrCreate(this.controller);
@@ -317,6 +318,8 @@ public class GUIView implements View {
 
     @Override
     public void requestHeroClass() {
+        inputField.setEnabled(false);
+
         mapPanel.removeAll();
         mapPanel.setLayout(new GridLayout(3, 2, 10, 10));  // 3 rows, 2 columns
 
@@ -340,8 +343,6 @@ public class GUIView implements View {
 
         mapPanel.revalidate();
         mapPanel.repaint();
-
-        this.currentState = "requestHeroClass";
     }
 
     @Override
@@ -376,6 +377,7 @@ public class GUIView implements View {
 
     @Override
     public void requestMovement() {
+        inputField.setEnabled(true);
         messageArea.append("Where do you want to go next ?\n");
         messageArea.append("Use arrow keys or type [N] - [S] - [E] - [W]\n");
         messageArea.setCaretPosition(messageArea.getDocument().getLength());
