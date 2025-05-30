@@ -8,6 +8,7 @@ import com.swingy.service.BattleService;
 import com.swingy.service.MapService;
 import com.swingy.storage.HeroDbRepository;
 import com.swingy.view.View;
+import com.swingy.view.gui.GUIView;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -17,16 +18,18 @@ public class GameController {
 
     View currentView;
     Hero currentHero;
+    GameMap gameMap;
+    private ViewSwitcher viewSwitcher;
     private final HeroDbRepository heroRepository;
     private final HeroLoader heroLoader;
     public HeroCreationInput heroCreationInput;
-    private GameMap gameMap;
     private String savedDirection;
     private Villain savedVillain;
     private int savedEscapeChance;
 
     public GameController(View viewType) {
         this.currentView = viewType;
+        this.viewSwitcher = new ViewSwitcher();
         this.heroRepository = new HeroDbRepository();
         this.heroLoader = new HeroLoader(heroRepository, currentView);
         this.currentView.requestLoadOrCreate(this);
@@ -100,7 +103,15 @@ public class GameController {
         this.currentHero = hero;
     }
 
+    public void setCurrentView(View view) { this.currentView = view; }
+
     public void onHeroMovement(String direction) {
+
+        if (direction.equals("Switch")) {
+            this.viewSwitcher.switchView(this);
+            return ;
+        }
+
         this.savedEscapeChance = 50;
         if (currentHero.isPowerEscape()) {
             this.savedEscapeChance += 15;
@@ -270,5 +281,4 @@ public class GameController {
         this.currentView.showMap(gameMap);
         this.currentView.requestMovement();
     }
-
 }

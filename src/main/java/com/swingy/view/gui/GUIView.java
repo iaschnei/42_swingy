@@ -25,6 +25,11 @@ public class GUIView implements View {
 
     public GUIView() {
         initializeGUI();
+        currentState = null;
+    }
+
+    public void setController(GameController controller) {
+        this.controller = controller;
     }
 
     private void initializeGUI() {
@@ -444,5 +449,9 @@ public class GUIView implements View {
         } else {
             controller.onArtifactDecision("No");
         }
+    }
+
+    public void exitWindow() {
+        mainFrame.dispose();
     }
 }

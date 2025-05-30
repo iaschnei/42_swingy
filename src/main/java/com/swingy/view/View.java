@@ -10,6 +10,8 @@ import java.util.List;
 
 public interface View {
 
+    void setController(GameController controller);
+
     // Display various information
     void showHeroStats(Hero hero);
     void showMap(GameMap gameMap);

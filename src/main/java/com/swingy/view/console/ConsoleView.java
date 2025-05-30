@@ -15,8 +15,12 @@ public class ConsoleView implements View {
     public ConsoleView() {}
 
     GameController controller;
-    
-    
+
+
+    @Override
+    public void setController(GameController controller) {
+        this.controller = controller;
+    }
 
     @Override
     public void showHeroStats(Hero hero) {
