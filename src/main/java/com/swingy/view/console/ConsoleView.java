@@ -12,7 +12,11 @@ import java.util.Scanner;
 
 public class ConsoleView implements View {
 
-    public ConsoleView() {}
+    private final boolean visible_enemies;
+
+    public ConsoleView(boolean visible_enemies) {
+        this.visible_enemies = visible_enemies;
+    }
 
     GameController controller;
 
@@ -69,10 +73,10 @@ public class ConsoleView implements View {
                 }
                 else if (gameMap.getTile(h, w).isVisited()) {
                     System.out.print("~ ");
-                } //TODO vvv REMOVE FOR GAMEPLAY vvv
-                else if (gameMap.getTile(h, w).isEnemy()) {
+                }
+                else if (gameMap.getTile(h, w).isEnemy() && this.visible_enemies) {
                     System.out.print("E ");
-                } // TODO ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                }
                 else {
                     System.out.print("· ");
                 }
@@ -318,5 +322,10 @@ public class ConsoleView implements View {
         Scanner scanner = new Scanner(System.in);
         String decision = scanner.nextLine();
         this.controller.onArtifactDecision(decision);
+    }
+
+    @Override
+    public boolean getVisibleEnemies() {
+        return this.visible_enemies;
     }
 }

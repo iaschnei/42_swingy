@@ -41,7 +41,7 @@ public class MapService {
 
     private void populateGameMap() {
         Random random = new Random();
-        int enemyCount = hero.getLevel() * 7 + 10;
+        int enemyCount = hero.getLevel() * 10 + ((hero.getLevel() - 1) * 5);
         int center = mapSize / 2;
 
         while (enemyCount > 0) {

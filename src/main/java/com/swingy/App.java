@@ -22,18 +22,29 @@ public class App {
 
         try {
 
-            if (args.length != 1)
+            if (args.length < 1 || args.length > 2)
             {
-                System.out.println("Usage: java -jar Swingy.jar [gui/console]");
+                System.out.println("Usage: java -jar Swingy.jar [gui/console] [-v]");
                 return;
             }
 
+            boolean visible_enemies = false;
+
+            if (args.length == 2) {
+                if (args[1].equals("-v")) {
+                    visible_enemies = true;
+                }
+                else {
+                    throw new Exception("Unknown option, usage: java -jar Swingy.jar [gui/console] [-v]");
+                }
+            }
+
             if (args[0].equals("gui")) {
-                GUIView guiView = new GUIView();
+                GUIView guiView = new GUIView(visible_enemies);
                 gameController = new GameController(guiView);
             }
             else if (args[0].equals("console")) {
-                ConsoleView consoleView = new ConsoleView();
+                ConsoleView consoleView = new ConsoleView(visible_enemies);
                 gameController = new GameController(consoleView);
             }
             else {

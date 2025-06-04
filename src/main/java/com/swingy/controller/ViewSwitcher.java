@@ -11,11 +11,11 @@ public class ViewSwitcher {
 
         if (gameController.currentView instanceof GUIView) {
             ((GUIView) gameController.currentView).exitWindow();
-            gameController.setCurrentView(new ConsoleView());
+            gameController.setCurrentView(new ConsoleView(gameController.currentView.getVisibleEnemies()));
             gameController.currentView.showMessage("Switching to console view...");
         }
         else {
-            gameController.setCurrentView(new GUIView());
+            gameController.setCurrentView(new GUIView(gameController.currentView.getVisibleEnemies()));
             gameController.currentView.showMessage("Switching to GUI view...");
         }
 

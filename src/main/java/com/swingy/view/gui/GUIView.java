@@ -20,10 +20,12 @@ public class GUIView implements View {
     private JTextArea messageArea;
     private JTextField inputField;
     private String currentState;
+    private final boolean visible_enemies;
     GameController controller;
 
 
-    public GUIView() {
+    public GUIView(boolean visible_enemies) {
+        this.visible_enemies = visible_enemies;
         initializeGUI();
         currentState = null;
     }
@@ -161,7 +163,7 @@ public class GUIView implements View {
 
                 if (gameMap.getTile(i, j).isHero()) {
                     cell.setBackground(Color.BLUE);
-                } else if (gameMap.getTile(i, j).isEnemy()) {
+                } else if (gameMap.getTile(i, j).isEnemy() && this.visible_enemies) {
                     cell.setBackground(Color.RED);
                 } else if (gameMap.getTile(i, j).isVisited()) {
                     cell.setBackground(Color.LIGHT_GRAY);
@@ -399,13 +401,9 @@ public class GUIView implements View {
         JButton fightButton = new JButton("Fight");
         JButton escapeButton = new JButton("Escape (" + escapeChance + "%)");
 
-        fightButton.addActionListener(e -> {
-            controller.onBattleDecision("Fight");
-        });
+        fightButton.addActionListener(e -> controller.onBattleDecision("Fight"));
 
-        escapeButton.addActionListener(e -> {
-            controller.onBattleDecision("Escape");
-        });
+        escapeButton.addActionListener(e -> controller.onBattleDecision("Escape"));
 
         // Center align buttons
         fightButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -449,6 +447,11 @@ public class GUIView implements View {
         } else {
             controller.onArtifactDecision("No");
         }
+    }
+
+    @Override
+    public boolean getVisibleEnemies() {
+        return this.visible_enemies;
     }
 
     public void exitWindow() {

@@ -3,7 +3,6 @@ package com.swingy.view;
 import com.swingy.controller.GameController;
 import com.swingy.model.hero.Hero;
 import com.swingy.model.map.GameMap;
-import com.swingy.model.map.Tile;
 import com.swingy.model.villain.Villain;
 
 import java.util.List;
@@ -37,4 +36,6 @@ public interface View {
     void requestMovement();
     void requestBattleDecision(Villain villain, int escapeChance);
     void requestArtifactDecision(Hero hero, Villain villain);
+
+    boolean getVisibleEnemies();
 }
